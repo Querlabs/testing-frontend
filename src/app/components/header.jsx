@@ -64,7 +64,7 @@ export default function Hero() {
             </div>
 
             <span className="text-[23px] font-bold tracking-[-0.8px]">
-              Interview<span className="text-[#2563EB]">Proof</span>
+              Test<span className="text-[#2563EB]">Yourself</span>
             </span>
 
           </a>
