@@ -17,7 +17,7 @@ export default function Hero() {
   }, []);
 
   return (
-    <main className="relative h-screen min-h-[700px] overflow-hidden bg-[#F8FAFC] text-[#0F172A]">
+    <main className="relative pb-4 h-screen min-h-[700px] overflow-hidden bg-[#F8FAFC] text-[#0F172A]">
 
       {/* =====================================================
           BACKGROUND
