@@ -121,9 +121,8 @@ export default function Login() {
 
           {/* Button */}
           <Link
-            href={"/user-dashboard"}
-            type="submit"
-            className="w-full h-[56px] rounded-[14px] bg-blue-600 text-white text-[15px] font-bold shadow-[0_8px_20px_rgba(37,99,235,0.20)] hover:bg-blue-700 transition-all"
+            href="/user-dashboard"
+            className="flex h-[56px] w-full items-center justify-center rounded-[14px] bg-blue-600 text-[15px] font-bold text-white shadow-[0_8px_20px_rgba(37,99,235,0.20)] transition-all hover:bg-blue-700"
           >
             Sign In
           </Link>
