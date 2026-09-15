@@ -1574,6 +1574,21 @@ import ProgressPage from "./assessments/progress";
 
 import RetakeAssessmentsPage from "./assessments/retakeAssessment";
 
+import ScoreComparisonPage from "./assessments/testComparisons";
+
+import ImprovementPercentPage from "./assessments/improvementStats";
+
+import BenchmarksPage from "./assessments/benchmarks";
+
+import ProfilePage from "./account/profile";
+
+import CareerInterviewTargets from "./account/targets";
+
+import ResumeProfessionalLinks from "./account/resume";
+
+import AccountSettings from "./account/settings";
+
+import BillingSubscription from "./account/billing";
 export default function CandidateDashboard() {
   const [activeItem, setActiveItem] = useState("overall-readiness");
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -1907,7 +1922,7 @@ export default function CandidateDashboard() {
                 handleItemClick("improvement-percent")
               }
             />
-
+{/* 
             <SidebarItem
               label="Readiness History"
               active={
@@ -1934,7 +1949,7 @@ export default function CandidateDashboard() {
               onClick={() =>
                 handleItemClick("assessment-history")
               }
-            />
+            /> */}
 
             <SidebarItem
               label="Benchmarks"
@@ -1959,14 +1974,14 @@ export default function CandidateDashboard() {
             />
 
             <SidebarItem
-              label="Target Role"
-              active={activeItem === "target-role"}
+              label="Targets"
+              active={activeItem === "targets"}
               onClick={() =>
-                handleItemClick("target-role")
+                handleItemClick("targets")
               }
             />
 
-            <SidebarItem
+            {/* <SidebarItem
               label="Target Companies"
               active={
                 activeItem === "target-companies"
@@ -1974,7 +1989,7 @@ export default function CandidateDashboard() {
               onClick={() =>
                 handleItemClick("target-companies")
               }
-            />
+            /> */}
 
             <SidebarItem
               label="Resume / JD"
@@ -1993,6 +2008,17 @@ export default function CandidateDashboard() {
                 handleItemClick("account-settings")
               }
             />
+
+            <SidebarItem
+              label="Billing"
+              active={
+                activeItem === "billing"
+              }
+              onClick={() =>
+                handleItemClick("billing")
+              }
+            />
+
 
           </SidebarSection>
 
@@ -2148,18 +2174,14 @@ export default function CandidateDashboard() {
             ================================================= */}
 
             {activeItem === "score-comparison" && (
-              <Placeholder
-                title="Previous vs Current Score"
-              />
+              <ScoreComparisonPage/>
             )}
 
             {activeItem === "improvement-percent" && (
-              <Placeholder
-                title="Improvement %"
-              />
+              <ImprovementPercentPage/>
             )}
 
-            {activeItem === "readiness-history" && (
+            {/* {activeItem === "readiness-history" && (
               <ProgressPage />
             )}
 
@@ -2169,36 +2191,36 @@ export default function CandidateDashboard() {
 
             {activeItem === "assessment-history" && (
               <PreviousAssessments />
-            )}
+            )} */}
 
             {activeItem === "benchmarks" && (
-              <Placeholder
-                title="Benchmarks / Percentile"
-              />
+              <BenchmarksPage/>
             )}
 
             {activeItem === "profile-info" && (
-              <Placeholder title="Profile" />
+              <ProfilePage />
             )}
 
-            {activeItem === "target-role" && (
-              <Placeholder title="Target Role" />
+            {activeItem === "targets" && (
+              <CareerInterviewTargets />
             )}
 
-            {activeItem === "target-companies" && (
+            {/* {activeItem === "target-companies" && (
               <Placeholder
                 title="Target Companies"
               />
-            )}
+            )} */}
 
             {activeItem === "resume-jd" && (
-              <Placeholder title="Resume / JD" />
+              <ResumeProfessionalLinks />
             )}
 
             {activeItem === "account-settings" && (
-              <Placeholder
-                title="Account Settings"
-              />
+              <AccountSettings/>
+            )}
+
+            {activeItem === "billing" && (
+              <BillingSubscription/>
             )}
 
           </div>

@@ -15,6 +15,7 @@ import {
   Bug,
   Scale,
 } from "lucide-react";
+import Link from "next/link";
 
 
 // =====================================================
@@ -499,8 +500,9 @@ function SimulationDetailsModal({
 
 
           {/* CTA */}
-          <button
-            onClick={() => onStart(simulation)}
+          <Link
+            // onClick={() => onStart(simulation)}
+            href={"/voice-round"}
             className="
               w-full mt-6
               py-3.5
@@ -517,7 +519,7 @@ function SimulationDetailsModal({
           >
             Start Simulation
             <ArrowRight className="w-4 h-4" />
-          </button>
+          </Link>
 
         </div>
 

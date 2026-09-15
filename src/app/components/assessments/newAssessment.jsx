@@ -14,6 +14,7 @@ import {
   ClipboardCheck,
   Building2,
 } from "lucide-react";
+import Link from "next/link";
 
 
 // =====================================================
@@ -248,14 +249,15 @@ function AssessmentCard({
         <div className="mt-5 pt-5 border-t border-slate-100 flex flex-wrap items-center justify-end gap-2">
 
           {assessment.status === "Not Started" && (
-            <button
-              onClick={() => onStart(assessment)}
+            <Link
+              // onClick={() => onStart(assessment)}
+              href={"/coding-round"}
               className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold transition-all hover:shadow-md hover:shadow-blue-100"
             >
               <Play className="w-3.5 h-3.5 fill-current" />
               Start Assessment
               <ArrowRight className="w-3.5 h-3.5" />
-            </button>
+            </Link>
           )}
 
 
