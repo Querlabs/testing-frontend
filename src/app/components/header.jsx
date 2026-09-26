@@ -1,10 +1,43 @@
 "use client";
-
+import { useAuth } from "../context/auth.context";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 
 export default function Hero() {
+  const {autoLogin, Loading} = useAuth()
+  const [onBoarded, setOnBoarded] = useState(false);
+  const [loginCheck, setLoginCheck] = useState(false);
   const [activeWord, setActiveWord] = useState(0);
+  const [user, setUser] = useState({})
+  useEffect(() => {
+    const checkAuth = async () => {
+      try {
+        const response = await autoLogin();
+
+        if (response?.success) {
+          setUser(response.user);
+
+          setLoginCheck(true);
+
+          if (response.user?.onBoarded === true) {
+            setOnBoarded(true);
+          } else {
+            setOnBoarded(false);
+          }
+        } else {
+          setLoginCheck(false);
+        }
+      } catch (error) {
+        console.log("Auto login failed:", error);
+
+        setLoginCheck(false);
+        setUser(null);
+        setOnBoarded(false);
+      }
+    };
+
+    checkAuth();
+  }, []);
 
   const words = ["ready.", "confident.", "unstoppable."];
 
@@ -104,25 +137,48 @@ export default function Hero() {
           </nav>
 
           {/* CTA */}
-          <div className="hidden items-center gap-3 sm:flex">
+          {(!loginCheck && !Loading) &&
+            <div className="hidden items-center gap-3 sm:flex">
 
-            <a
-              href="/login"
-              className="rounded-full px-5 py-2.5 text-[14px] font-medium text-[#33466B] transition hover:text-[#2563EB]"
-            >
-              Login
-            </a>
+              <a
+                href="/login"
+                className="rounded-full px-5 py-2.5 text-[14px] font-medium text-[#33466B] transition hover:text-[#2563EB]"
+              >
+                Login
+              </a>
 
+              <Link
+                href="/signup"
+                className="group flex items-center gap-2 rounded-full bg-[#2563EB] px-5 py-2.5 text-[14px] font-semibold text-white shadow-[0_8px_25px_rgba(37,99,235,.22)] transition-all duration-300 hover:-translate-y-0.5 hover:bg-[#1D4ED8] hover:shadow-[0_12px_30px_rgba(37,99,235,.3)]"
+              >
+                Get Started
+
+                <Arrow className="transition-transform duration-300 group-hover:translate-x-1" />
+              </Link>
+
+            </div>
+          }
+
+          {(!onBoarded && !Loading && loginCheck) &&
             <Link
-              href="/signup"
+              href="/onboarding"
               className="group flex items-center gap-2 rounded-full bg-[#2563EB] px-5 py-2.5 text-[14px] font-semibold text-white shadow-[0_8px_25px_rgba(37,99,235,.22)] transition-all duration-300 hover:-translate-y-0.5 hover:bg-[#1D4ED8] hover:shadow-[0_12px_30px_rgba(37,99,235,.3)]"
             >
-              Get Started
+              Complete On-Boarding
 
               <Arrow className="transition-transform duration-300 group-hover:translate-x-1" />
             </Link>
+          }
+          {(onBoarded && !Loading && loginCheck) &&
+            <Link
+              href="/user-dashboard"
+              className="group flex items-center gap-2 rounded-full bg-[#2563EB] px-5 py-2.5 text-[14px] font-semibold text-white shadow-[0_8px_25px_rgba(37,99,235,.22)] transition-all duration-300 hover:-translate-y-0.5 hover:bg-[#1D4ED8] hover:shadow-[0_12px_30px_rgba(37,99,235,.3)]"
+            >
+              Visit Dashboard
 
-          </div>
+              <Arrow className="transition-transform duration-300 group-hover:translate-x-1" />
+            </Link>
+          }
 
           {/* Mobile */}
           <button className="rounded-xl border border-[#E2E8F0] bg-white p-2.5 lg:hidden">

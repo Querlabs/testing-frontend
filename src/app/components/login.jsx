@@ -2,9 +2,41 @@
 
 import { Mail, Lock, Eye, EyeOff, Sparkles } from "lucide-react";
 import { useState } from "react";
+import { useAuth } from "../context/auth.context";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 export default function Login() {
+  const router = useRouter()
+  const {login, Loading} = useAuth()
   const [showPassword, setShowPassword] = useState(false);
+  const [error, setError] = useState('')
+  const [formData, setFormData] = useState({
+    email: "",
+    password: ""
+  })
+
+  function LoginUser(el){
+    el.preventDefault()
+    async function log(){
+      try {
+        const data = await login(formData.email, formData.password);
+  
+        console.log(data.user.onBoarded);
+        if(data.user.onBoarded){
+          router.push("/user-dashboard");
+        }else{
+          router.push("/onboarding");
+
+        }
+  
+        // successful login
+      } catch (error) {
+        setError(error.message);  
+      }
+
+    }
+    log()
+  }
 
   return (
     <div className="min-h-screen bg-[#f7f9fc] relative overflow-hidden flex items-center justify-center px-4">
@@ -63,7 +95,11 @@ export default function Login() {
 
         {/* Form */}
         <form className="space-y-5">
-
+          {error && (
+              <div className="mb-4 rounded-xl border border-red-200 bg-red-50 px-3.5 py-3 text-[12px] font-medium text-red-600">
+                {error}
+              </div>
+            )}
           {/* Email */}
           <div>
             <label className="block mb-2 text-[13px] font-bold tracking-wide text-[#63748f]">
@@ -75,6 +111,12 @@ export default function Login() {
 
               <input
                 type="email"
+                onChange={(e) =>
+                  setFormData((prev) => ({
+                    ...prev,
+                    email: e.target.value,
+                  }))
+                }
                 placeholder="you@example.com"
                 className="w-full h-[56px] rounded-[14px] border border-[#dce4ef] bg-[#f8fafc] pl-12 pr-4 text-[15px] outline-none transition-all placeholder:text-[#a5b3c7] focus:border-blue-500 focus:ring-4 focus:ring-blue-100"
               />
@@ -102,7 +144,13 @@ export default function Login() {
               <input
                 type={showPassword ? "text" : "password"}
                 placeholder="Enter your password"
-                className="w-full h-[56px] rounded-[14px] border border-[#dce4ef] bg-[#f8fafc] pl-12 pr-12 text-[15px] outline-none transition-all placeholder:text-[#a5b3c7] focus:border-blue-500 focus:ring-4 focus:ring-blue-100"
+                onChange={(e) =>
+                  setFormData((prev) => ({
+                    ...prev,
+                    password: e.target.value,
+                  }))
+                }
+                className="w-full h-[56px] rounded-[14px] border border-[#dce4ef] bg-[#f8fafc] pl-12 pr-12 text-[15px] text-[#000000] outline-none transition-all placeholder:text-[#000000] focus:border-blue-500 focus:ring-4 focus:ring-blue-100"
               />
 
               <button
@@ -120,24 +168,51 @@ export default function Login() {
           </div>
 
           {/* Button */}
-          <Link
-            href="/user-dashboard"
-            className="flex h-[56px] w-full items-center justify-center rounded-[14px] bg-blue-600 text-[15px] font-bold text-white shadow-[0_8px_20px_rgba(37,99,235,0.20)] transition-all hover:bg-blue-700"
+          <button
+            onClick={LoginUser}
+            className="flex h-[56px] cursor-pointer w-full items-center justify-center rounded-[14px] bg-blue-600 text-[15px] font-bold text-white shadow-[0_8px_20px_rgba(37,99,235,0.20)] transition-all hover:bg-blue-700"
           >
-            Sign In
-          </Link>
+            {Loading ? (
+              <span className="flex items-center justify-center gap-2">
+                <span className="h-4 w-4 animate-spin rounded-full border-2 border-white/30 border-t-white" />
+                please wait ...
+              </span>
+            ) : (
+              <span className="flex items-center justify-center gap-2">
+                Sign In
+                <Arrow />
+              </span>
+            )}
+          </button>
 
         </form>
 
         {/* Register */}
         <p className="text-center mt-6 text-[14px] text-[#71809a]">
           Don't have an account?{" "}
-          <button className="font-bold text-blue-600 hover:text-blue-700">
+          <Link href="/signup" className="font-bold text-blue-600 hover:text-blue-700">
             Create account
-          </button>
+          </Link>
         </p>
 
       </div>
     </div>
+  );
+}
+
+function Arrow() {
+  return (
+    <svg
+      width="16"
+      height="16"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+    >
+      <path d="M5 12h14" />
+      <path d="m13 6 6 6-6 6" />
+    </svg>
   );
 }

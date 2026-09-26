@@ -29,7 +29,7 @@
 
 import { Poppins } from "next/font/google";
 import "./globals.css";
-
+import { AuthProvider } from "./context/auth.context";
 const poppins = Poppins({
   variable: "--font-poppins",
   subsets: ["latin"],
@@ -47,7 +47,11 @@ export default function RootLayout({ children }) {
       lang="en"
       className={`${poppins.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col">{children}</body>
+      <body className="min-h-full flex flex-col">
+        <AuthProvider>
+        {children}
+        </AuthProvider>
+      </body>
     </html>
   );
 }
