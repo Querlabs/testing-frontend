@@ -1160,10 +1160,10 @@ export default function MyAssessments() {
 
       <div className="space-y-4">
 
-        {assessments.map((assessment) => (
+        {assessments.map((assessment,idx) => (
 
           <AssessmentCard
-            key={assessment.id}
+            key={`${assessment.id}-${idx}`}
             assessment={assessment}
             onStart={handleStart}
             onContinue={handleContinue}
