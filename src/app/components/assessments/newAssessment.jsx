@@ -1,6 +1,8 @@
 "use client";
 
-import { useState } from "react";
+import { useState , useEffect} from "react";
+import { useAssessment } from "@/app/context/assessments.context";
+import { useNeeds } from "@/app/context/needs.context";
 import {
   Plus,
   ArrowRight,
@@ -22,35 +24,7 @@ import Link from "next/link";
 // =====================================================
 
 const initialAssessments = [
-  {
-    id: 1,
-    company: "Google",
-    role: "SDE-1",
-    experience: "1–2 YOE",
-    type: "Company Simulation",
-    jdAdded: true,
-    status: "Not Started",
-  },
-  {
-    id: 2,
-    company: "Microsoft",
-    role: "SDE-1",
-    experience: "1–2 YOE",
-    type: "Company Simulation",
-    jdAdded: true,
-    status: "Completed",
-    score: 78,
-  },
-  {
-    id: 3,
-    company: "Amazon",
-    role: "SDE-1",
-    experience: "2–3 YOE",
-    type: "Generic Simulation",
-    jdAdded: false,
-    status: "In Progress",
-    progress: 45,
-  },
+
 ];
 
 
@@ -360,15 +334,19 @@ function OptionCard({
 function AddAssessmentModal({
   onClose,
   onCreate,
+  AddNewAssessment,
+  resumes,
+  Loading
 }) {
   const [step, setStep] = useState(1);
-
+  console.log("passed resume", resumes)
   const [config, setConfig] = useState({
     role: "",
     company: "",
     experience: "",
     jobDescription: "",
     genericInterview: false,
+    resume:{}
   });
 
 
@@ -398,7 +376,7 @@ function AddAssessmentModal({
   const nextStep = () => {
     if (!isStepValid()) return;
 
-    if (step < 5) {
+    if (step < 6) {
       setStep((previous) => previous + 1);
     }
   };
@@ -428,14 +406,16 @@ function AddAssessmentModal({
         ? "Generic Simulation"
         : "Company Simulation",
 
-      jdAdded: Boolean(
+      jdAdded: 
         config.jobDescription.trim()
-      ),
+      ,
 
       status: "Not Started",
+      resume: config.resume
     };
 
-    onCreate(newAssessment);
+    // onCreate(newAssessment);
+    AddNewAssessment(newAssessment)
   };
 
 
@@ -482,7 +462,7 @@ function AddAssessmentModal({
           {/* Progress */}
           <div className="flex items-center gap-1.5 mt-5">
 
-            {[1, 2, 3, 4, 5].map((number) => (
+            {[1, 2, 3, 4, 5, 6].map((number) => (
 
               <div
                 key={number}
@@ -639,7 +619,7 @@ function AddAssessmentModal({
           )}
 
 
-          {/* ======================================
+           {/* ======================================
               STEP 4
           ====================================== */}
 
@@ -648,6 +628,44 @@ function AddAssessmentModal({
 
               <StepTitle
                 number="Step 4"
+                title="Choose Your Resume"
+                description="We'll use this to calibrate interview relevent."
+              />
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+
+                {resumes?.map((resume) => (
+                  <OptionCard
+                    key={resume.key}
+                    label={`Resume-${resume.name}`}
+                    selected={
+                      config.resume === resume
+                    }
+                    onClick={() =>
+                      updateConfig(
+                        "resume",
+                        resume
+                      )
+                    }
+                  />
+                ))}
+
+              </div>
+
+            </div>
+          )}
+          
+
+
+          {/* ======================================
+              STEP 4
+          ====================================== */}
+
+          {step === 5 && (
+            <div>
+
+              <StepTitle
+                number="Step 5"
                 title="Add Your Job Description"
                 description="Adding a JD helps personalize your assessment."
               />
@@ -692,14 +710,14 @@ function AddAssessmentModal({
 
 
           {/* ======================================
-              STEP 5 — REVIEW
+              STEP 6 — REVIEW
           ====================================== */}
 
-          {step === 5 && (
+          {step === 6 && (
             <div>
 
               <StepTitle
-                number="Step 5"
+                number="Step 6"
                 title="Review Your Assessment"
                 description="Everything looks good? Create your simulation."
               />
@@ -823,7 +841,18 @@ function AddAssessmentModal({
                 onClick={createAssessment}
                 className="w-full mt-7 py-3.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold flex items-center justify-center gap-2 transition-all hover:shadow-md hover:shadow-blue-100"
               >
-                Create Assessment
+                
+                {Loading ? (
+                  <span className="flex items-center justify-center gap-2">
+                    <span className="h-4 w-4 animate-spin rounded-full border-2 border-white/30 border-t-white" />
+                    please wait(2-3 Minutes) ...
+                  </span>
+                ) : (
+                  <span className="flex items-center justify-center gap-2">
+                    Create Assessment
+                    <Arrow />
+                  </span>
+                )}
                 <ArrowRight className="w-4 h-4" />
               </button>
 
@@ -835,7 +864,7 @@ function AddAssessmentModal({
               NAVIGATION
           ====================================== */}
 
-          {step < 5 && (
+          {step < 7 && (
             <div className="flex items-center justify-between mt-8 pt-5 border-t border-slate-100">
 
               <button
@@ -857,25 +886,26 @@ function AddAssessmentModal({
                 Back
               </button>
 
-
-              <button
-                type="button"
-                disabled={!isStepValid()}
-                onClick={nextStep}
-                className={`
-                  inline-flex items-center gap-2
-                  px-4 py-2.5 rounded-xl
-                  text-xs font-semibold
-                  ${
-                    isStepValid()
-                      ? "bg-blue-600 hover:bg-blue-700 text-white"
-                      : "bg-slate-100 text-slate-400 cursor-not-allowed"
-                  }
-                `}
-              >
-                Continue
-                <ArrowRight className="w-3.5 h-3.5" />
-              </button>
+              {step < 6 &&
+                <button
+                  type="button"
+                  disabled={!isStepValid()}
+                  onClick={nextStep}
+                  className={`
+                    inline-flex items-center gap-2
+                    px-4 py-2.5 rounded-xl
+                    text-xs font-semibold
+                    ${
+                      isStepValid()
+                        ? "bg-blue-600 hover:bg-blue-700 text-white"
+                        : "bg-slate-100 text-slate-400 cursor-not-allowed"
+                    }
+                  `}
+                >
+                  Continue
+                  <ArrowRight className="w-3.5 h-3.5" />
+                </button>
+              }
 
             </div>
           )}
@@ -924,13 +954,33 @@ function StepTitle({
 
 export default function MyAssessments() {
 
+  const {AddNewAssessment, Loading, getAllCustomAssessments} = useAssessment();
+  const {getUserResumes, resumes} = useNeeds();
+  const [modalState, setModalState] = useState({})
   const [assessments, setAssessments] = useState(
     initialAssessments
   );
 
   const [showAddModal, setShowAddModal] = useState(false);
 
+  useEffect(el=>{
+    getUserResumes();
+    const fetchAssessmentsCustom = async () => {
+        try {
+            const response = await getAllCustomAssessments();
 
+            if (response?.success) {
+                setAssessments(response.data || []);
+            }
+        } catch (error) {
+            console.error("Failed to fetch assessments:", error);
+            setAssessments([]);
+        }
+    };
+
+    fetchAssessmentsCustom();
+
+  }, [])
   // ===================================================
   // CREATE ASSESSMENT
   // ===================================================
@@ -1034,6 +1084,9 @@ export default function MyAssessments() {
           <AddAssessmentModal
             onClose={() => setShowAddModal(false)}
             onCreate={handleCreateAssessment}
+            AddNewAssessment={AddNewAssessment}
+            resumes={resumes}
+            Loading={Loading}
           />
         )}
 
@@ -1135,5 +1188,23 @@ export default function MyAssessments() {
       )}
 
     </div>
+  );
+}
+
+
+function Arrow() {
+  return (
+    <svg
+      width="16"
+      height="16"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+    >
+      <path d="M5 12h14" />
+      <path d="m13 6 6 6-6 6" />
+    </svg>
   );
 }
