@@ -16,15 +16,16 @@ import {
   ShieldCheck,
   ChevronDown,
 } from "lucide-react";
-
+import { useAssessment } from "@/app/context/assessments.context";
+import { useSearchParams } from "next/navigation";
 /* =========================================================
    DATA
 ========================================================= */
 
 const interviewer = {
-  name: "Rahul Mehta",
+  name: "Intercrack Engine",
   role: "AI Interviewer",
-  initials: "RM",
+  initials: "IE",
 };
 
 const candidate = {
@@ -215,7 +216,7 @@ function CurrentQuestion({ question }) {
       </div>
 
       <p className="max-w-3xl text-sm font-medium leading-6 text-white sm:text-base">
-        {question}
+        {question.question}
       </p>
     </div>
   );
@@ -578,6 +579,10 @@ function InterviewComplete() {
 ========================================================= */
 
 export default function LiveAIInterview() {
+  const {connectInterview, CurrentQuestion} = useAssessment(); 
+
+  const searchParams = useSearchParams();
+  const interviewId = searchParams.get("interview-id");
   const [state, setState] = useState("ai-speaking");
 
   const [micOn, setMicOn] = useState(true);
@@ -591,53 +596,57 @@ export default function LiveAIInterview() {
   const [questionIndex, setQuestionIndex] = useState(0);
 
   /* TIMER */
-  useEffect(() => {
-    if (completed) return;
+  // useEffect(() => {
+  //   if (completed) return;
 
-    const timer = setInterval(() => {
-      setSeconds((prev) => (prev > 0 ? prev - 1 : 0));
-    }, 1000);
+  //   const timer = setInterval(() => {
+  //     setSeconds((prev) => (prev > 0 ? prev - 1 : 0));
+  //   }, 1000);
 
-    return () => clearInterval(timer);
-  }, [completed]);
+  //   return () => clearInterval(timer);
+  // }, [completed]);
+
+  useEffect(el=>{
+    connectInterview(interviewId)
+  }, [])
 
   /* MOCK AI INTERVIEW FLOW */
-  useEffect(() => {
-    if (completed) return;
+  // useEffect(() => {
+  //   if (completed) return;
 
-    const cycle = [
-      ["ai-speaking", 5000],
-      ["candidate-ready", 2500],
-      ["candidate-speaking", 5000],
-      ["processing", 1800],
-      ["ai-thinking", 2500],
-      ["ai-speaking", 5000],
-    ];
+  //   const cycle = [
+  //     ["ai-speaking", 5000],
+  //     ["candidate-ready", 2500],
+  //     ["candidate-speaking", 5000],
+  //     ["processing", 1800],
+  //     ["ai-thinking", 2500],
+  //     ["ai-speaking", 5000],
+  //   ];
 
-    let timeout;
+  //   let timeout;
 
-    const runCycle = (index) => {
-      const [nextState, duration] = cycle[index];
+  //   const runCycle = (index) => {
+  //     const [nextState, duration] = cycle[index];
 
-      setState(nextState);
+  //     setState(nextState);
 
-      timeout = setTimeout(() => {
-        const nextIndex = (index + 1) % cycle.length;
+  //     timeout = setTimeout(() => {
+  //       const nextIndex = (index + 1) % cycle.length;
 
-        if (nextIndex === 0) {
-          setQuestionIndex((prev) =>
-            Math.min(prev + 1, questions.length - 1)
-          );
-        }
+  //       if (nextIndex === 0) {
+  //         setQuestionIndex((prev) =>
+  //           Math.min(prev + 1, questions.length - 1)
+  //         );
+  //       }
 
-        runCycle(nextIndex);
-      }, duration);
-    };
+  //       runCycle(nextIndex);
+  //     }, duration);
+  //   };
 
-    runCycle(0);
+  //   runCycle(0);
 
-    return () => clearTimeout(timeout);
-  }, [completed]);
+  //   return () => clearTimeout(timeout);
+  // }, [completed]);
 
   const handleSpeak = () => {
     if (state === "candidate-speaking") {
@@ -667,7 +676,7 @@ export default function LiveAIInterview() {
 
       <InterviewRoom
         state={state}
-        question={questions[questionIndex]}
+        question={CurrentQuestion}
         cameraOn={cameraOn}
       />
 

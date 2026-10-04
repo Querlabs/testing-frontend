@@ -17,8 +17,8 @@ import {
   Building2,
 } from "lucide-react";
 import Link from "next/link";
-
-
+import Loader from "../Loader";
+import { useRouter } from "next/navigation";
 // =====================================================
 // MOCK DATA
 // =====================================================
@@ -223,15 +223,15 @@ function AssessmentCard({
         <div className="mt-5 pt-5 border-t border-slate-100 flex flex-wrap items-center justify-end gap-2">
 
           {assessment.status === "Not Started" && (
-            <Link
-              // onClick={() => onStart(assessment)}
-              href={"/coding-round"}
+            <button
+              onClick={() => onStart(assessment)}
+              // href={"/coding-round"}
               className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold transition-all hover:shadow-md hover:shadow-blue-100"
             >
               <Play className="w-3.5 h-3.5 fill-current" />
               Start Assessment
               <ArrowRight className="w-3.5 h-3.5" />
-            </Link>
+            </button>
           )}
 
 
@@ -954,13 +954,13 @@ function StepTitle({
 
 export default function MyAssessments() {
 
-  const {AddNewAssessment, Loading, getAllCustomAssessments} = useAssessment();
+  const {AddNewAssessment, Loading, getAllCustomAssessments, startInterviewAssessment, LoadingMessage} = useAssessment();
   const {getUserResumes, resumes} = useNeeds();
   const [modalState, setModalState] = useState({})
   const [assessments, setAssessments] = useState(
     initialAssessments
   );
-
+  const router = useRouter();
   const [showAddModal, setShowAddModal] = useState(false);
 
   useEffect(el=>{
@@ -1002,6 +1002,22 @@ export default function MyAssessments() {
 
   const handleStart = (assessment) => {
     console.log("Start Assessment:", assessment);
+    async function starting(){
+      try {
+      const res = await startInterviewAssessment(assessment._id);
+  
+        if (res?.success) {
+          router.push(`/voice-round?interview-id=${res.data.interview_id}`)
+        } else {
+          console.error("Assessment start failed:", res);
+          // yaha toast/error dikha sakte ho
+        }
+      } catch (error) {
+        console.error("Start Assessment error:", error);
+      }
+
+    }
+    starting();
   };
 
   const handleContinue = (assessment) => {
@@ -1048,36 +1064,39 @@ export default function MyAssessments() {
           </button>
 
         </div>
+        {Loading &&
+          <Loader text={LoadingMessage}/>
+        }
+        {(assessments.length==0 && !Loading) &&
+          <div className="bg-white border border-slate-200 rounded-[22px] shadow-sm min-h-[400px] flex items-center justify-center p-8">
 
+            <div className="text-center max-w-md">
 
-        <div className="bg-white border border-slate-200 rounded-[22px] shadow-sm min-h-[400px] flex items-center justify-center p-8">
+              <div className="mx-auto w-14 h-14 rounded-2xl bg-blue-50 flex items-center justify-center">
+                <ClipboardCheck className="w-6 h-6 text-blue-600" />
+              </div>
 
-          <div className="text-center max-w-md">
+              <h2 className="text-xl font-bold text-slate-950 mt-5">
+                No assessments yet
+              </h2>
 
-            <div className="mx-auto w-14 h-14 rounded-2xl bg-blue-50 flex items-center justify-center">
-              <ClipboardCheck className="w-6 h-6 text-blue-600" />
+              <p className="text-sm text-slate-500 leading-6 mt-2">
+                Create your first interview simulation to discover
+                your interview readiness.
+              </p>
+
+              <button
+                onClick={() => setShowAddModal(true)}
+                className="mt-6 inline-flex items-center gap-2 px-5 py-3 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold transition-all"
+              >
+                <Plus className="w-4 h-4" />
+                Add Assessment
+              </button>
+
             </div>
 
-            <h2 className="text-xl font-bold text-slate-950 mt-5">
-              No assessments yet
-            </h2>
-
-            <p className="text-sm text-slate-500 leading-6 mt-2">
-              Create your first interview simulation to discover
-              your interview readiness.
-            </p>
-
-            <button
-              onClick={() => setShowAddModal(true)}
-              className="mt-6 inline-flex items-center gap-2 px-5 py-3 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold transition-all"
-            >
-              <Plus className="w-4 h-4" />
-              Add Assessment
-            </button>
-
           </div>
-
-        </div>
+        }
 
 
         {showAddModal && (
@@ -1101,7 +1120,9 @@ export default function MyAssessments() {
 
   return (
     <div className="w-full">
-
+      {Loading &&
+        <Loader text={LoadingMessage}/>
+      }
       {/* ================================================
           HEADER
       ================================================= */}
