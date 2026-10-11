@@ -155,7 +155,7 @@ export default function TrustStrip() {
 
           <p className="mt-4 text-center text-[9px] text-[#94A3B8]">
             Company names are used only to describe target interview
-            simulations. InterviewProof is not affiliated with or endorsed
+            simulations. InterCracks is not affiliated with or endorsed
             by these companies.
           </p>
 

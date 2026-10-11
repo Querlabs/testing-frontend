@@ -46,7 +46,7 @@ export default function Footer() {
           </div>
 
           <p className="text-xs font-semibold uppercase tracking-[0.3em] text-blue-400">
-            InterviewProof
+            InterCracks
           </p>
 
           <h2 className="mt-5 text-3xl font-bold tracking-tight sm:text-4xl">
@@ -67,7 +67,7 @@ export default function Footer() {
               animation: "wordmarkFloat 8s ease-in-out infinite",
             }}
           >
-            INTERVIEWPROOF
+            InterCracks
           </div>
 
           {/* Actual centered wordmark */}
@@ -104,7 +104,7 @@ export default function Footer() {
 
           {/* Copyright */}
           <div className="text-xs text-slate-600">
-            © {new Date().getFullYear()} InterviewProof
+            © {new Date().getFullYear()} InterCracks
           </div>
 
           {/* Center philosophy */}

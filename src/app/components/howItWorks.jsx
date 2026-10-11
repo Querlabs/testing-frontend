@@ -178,7 +178,7 @@ export default function HowItWorks() {
 
 
           <p className="mx-auto mt-5 max-w-xl text-[13px] leading-6 text-[#64748B] sm:text-[14px]">
-            InterviewProof turns every interview into a continuous
+            InterCracks turns every interview into a continuous
             improvement loop.
           </p>
 

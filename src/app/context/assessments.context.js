@@ -1,5 +1,5 @@
 'use client'
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useState, useRef } from "react";
 import axios from 'axios'
 const AssessmentContext = createContext();
 
@@ -8,6 +8,7 @@ export const AssessmentProvider = ({ children }) => {
     const [Loading, setLoading] = useState(false);
     const [LoadingMessage, setLoadingMessage] = useState("")
     const [CurrentQuestion, setCurrentQuestion] = useState({});
+    const socketRef = useRef(null);
     const AddNewAssessment = async (newAssessement) => {
         setLoading(true)
         try {
@@ -116,10 +117,17 @@ export const AssessmentProvider = ({ children }) => {
 
     const connectInterview = (interviewId) => {
         console.log("sdsd", process.env.SOCKET_MODE)
+        if (
+            socketRef.current &&
+            (socketRef.current.readyState === WebSocket.OPEN ||
+            socketRef.current.readyState === WebSocket.CONNECTING)
+        ) {
+            return socketRef.current;
+        }
         const socket = new WebSocket(
             `${process.env.NEXT_PUBLIC_SOCKET_MODE=='development' ? process.env.NEXT_PUBLIC_BACKEND_BASE_URL_SOCKET:process.env.NEXT_PUBLIC_BACKEND_PROD_URL_SOCKET }interview/ws/${interviewId}`
         );
-
+        socketRef.current = socket;
         socket.onopen = () => {
             console.log("WebSocket connected");
         };
@@ -131,6 +139,13 @@ export const AssessmentProvider = ({ children }) => {
                 const question = data.data;
 
                 setCurrentQuestion(question);
+            }
+            if (data.type === "greeting") {
+                console.log("GREETING:", data.data.message);
+                const question = data.data;
+
+                setCurrentQuestion(question);
+                return;
             }
         };
 
@@ -145,8 +160,29 @@ export const AssessmentProvider = ({ children }) => {
         return socket;
     };
 
+    const sendAnswer = (answer) => {
+
+        if (!socketRef.current) {
+            console.error("WebSocket is not connected");
+            return;
+        }
+
+        if (socketRef.current.readyState !== WebSocket.OPEN) {
+            console.error("WebSocket is not open");
+            return;
+        }
+
+        socketRef.current.send(
+            JSON.stringify({
+                answer: answer
+            })
+        );
+
+        console.log("Answer sent:", answer);
+    };
+
     return (
-        <AssessmentContext.Provider value={{CurrentQuestion, connectInterview, startInterviewAssessment, Loading, AddNewAssessment, getAllCustomAssessments, LoadingMessage}}>
+        <AssessmentContext.Provider value={{sendAnswer, CurrentQuestion, connectInterview, startInterviewAssessment, Loading, AddNewAssessment, getAllCustomAssessments, LoadingMessage}}>
         {children}
         </AssessmentContext.Provider>
     );

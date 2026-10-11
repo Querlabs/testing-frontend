@@ -131,8 +131,21 @@ function AudioWaveform({ active = false }) {
 ========================================================= */
 
 function InterviewHeader({ seconds }) {
-  const minutes = Math.floor(seconds / 60);
+ const minutes = Math.floor(seconds / 60);
   const remainingSeconds = seconds % 60;
+
+  const [ans, setAns] = useState('');
+
+  const { sendAnswer } = useAssessment();
+
+  const handleSendAnswer = () => {
+    if (!ans.trim()) return;
+
+    sendAnswer(ans);
+
+    setAns("");
+  };
+
 
   return (
     <header className="flex h-[68px] shrink-0 items-center justify-between border-b border-slate-200 bg-white px-5">
@@ -156,6 +169,21 @@ function InterviewHeader({ seconds }) {
           <p className="mt-0.5 text-xs text-slate-500">
             Microsoft · Software Engineer — SDE-1
           </p>
+          <div className="flex items-center gap-2">
+          <input
+            value={ans}
+            onChange={(e) => setAns(e.target.value)}
+            placeholder="add answer"
+            className="border border-slate-300 rounded px-2 py-1"
+          />
+
+          <button
+            onClick={handleSendAnswer}
+            className="rounded bg-blue-600 px-3 py-1 text-white"
+          >
+            Send Answer
+          </button>
+        </div>
         </div>
       </div>
 
@@ -216,7 +244,7 @@ function CurrentQuestion({ question }) {
       </div>
 
       <p className="max-w-3xl text-sm font-medium leading-6 text-white sm:text-base">
-        {question.question}
+        {question.question ? question.question : question.message}
       </p>
     </div>
   );

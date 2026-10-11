@@ -309,7 +309,7 @@ const onboardingSuccessEmail = (user) => {
             <td align="center" style="padding:30px 36px 38px;">
 
               <a
-                href="https://interviewproof.querlabs.com/dashboard"
+                href="https://InterCracks.querlabs.com/dashboard"
                 style="
                   display:inline-block;
                   padding:14px 28px;

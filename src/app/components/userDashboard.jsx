@@ -1615,7 +1615,7 @@ export default function CandidateDashboard() {
 
           <div>
             <p className="text-sm font-bold leading-none text-slate-900">
-              InterviewAI
+              InterCracks
             </p>
 
             <p className="mt-1 text-[10px] text-slate-500">
@@ -1697,7 +1697,7 @@ export default function CandidateDashboard() {
 
             <div>
               <p className="text-sm font-bold text-slate-900">
-                InterviewAI
+                InterCracks
               </p>
 
               <p className="mt-0.5 text-[10px] text-slate-500">

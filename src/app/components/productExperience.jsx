@@ -110,7 +110,7 @@ export default function ProductExperience() {
           </h2>
 
           <p className="mx-auto mt-6 max-w-2xl text-base leading-7 text-[#64748B] sm:text-lg">
-            InterviewProof recreates the pressure, unpredictability, and
+            InterCracks recreates the pressure, unpredictability, and
             technical depth of a real interview — then objectively tells you
             how you performed.
           </p>

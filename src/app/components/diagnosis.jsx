@@ -43,7 +43,7 @@ export default function DiagnosisSection() {
 
             <p className="mt-7 max-w-lg text-base leading-7 text-[#64748B]">
               Most interview platforms tell you how you performed.
-              InterviewProof tells you{" "}
+              InterCracks tells you{" "}
               <span className="font-semibold text-[#0F172A]">
                 what went wrong, why it matters, and what to fix.
               </span>
@@ -240,7 +240,7 @@ export default function DiagnosisSection() {
                   </span>
 
                   <span className="text-[9px] font-semibold text-white/25">
-                    INTERVIEWPROOF AI
+                    InterCracks AI
                   </span>
 
                 </div>

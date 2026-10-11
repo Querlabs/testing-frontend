@@ -260,7 +260,7 @@ export default function ImprovementLoop() {
             <span className="text-sm text-slate-400">
               One mock interview gives you a score.
               <span className="ml-1 font-semibold text-white">
-                InterviewProof gives you a path to improve it.
+                InterCracks gives you a path to improve it.
               </span>
             </span>
           </div>

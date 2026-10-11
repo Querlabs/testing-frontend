@@ -6,7 +6,7 @@ const plans = [
   {
     name: "Free",
     eyebrow: "GET STARTED",
-    description: "Experience InterviewProof before you commit.",
+    description: "Experience InterCracks before you commit.",
     price: "₹0",
     period: "forever",
     features: [

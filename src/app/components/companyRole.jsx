@@ -252,7 +252,7 @@ export default function CompanyRoleSimulations() {
         <div className="mx-auto mt-10 flex max-w-2xl items-center justify-center gap-2 text-center text-xs text-slate-400">
           <span className="text-green-500">✓</span>
           <span>
-            Only simulations currently available on InterviewProof are shown.
+            Only simulations currently available on InterCracks are shown.
           </span>
         </div>
       </div>
