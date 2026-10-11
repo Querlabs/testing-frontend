@@ -76,7 +76,7 @@ export default function Footer() {
               <div className="absolute -inset-8 rounded-full bg-blue-500/10 opacity-0 blur-3xl transition-all duration-700 group-hover:opacity-100" />
 
               <div className="relative text-4xl font-bold tracking-tight sm:text-5xl">
-                Interview<span className="text-blue-500">Proof</span>
+                Inter<span className="text-blue-500">Cracks.com</span>
               </div>
             </div>
           </div>

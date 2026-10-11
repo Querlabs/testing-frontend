@@ -339,7 +339,8 @@ import {
   ListChecks,
   Search,
   SlidersHorizontal,
-  Clock
+  Clock,
+  CheckCircle2
 } from "lucide-react";
 import { useTest } from "@/app/context/tests.context";
 import Link from "next/link";
@@ -374,7 +375,7 @@ const difficultyLabel = (counts = {}) => {
 function AssessmentCard({ assessment, onStart }) {
   const isAptitude = assessment.type === "aptitude";
   const counts = assessment.difficultyCounts || {};
-
+  const isSubmitted = assessment.isSubmitted
   const difficulties = [
     {
       label: "Easy",
@@ -400,7 +401,19 @@ function AssessmentCard({ assessment, onStart }) {
 
   return (
     <article className="group relative isolate flex h-full flex-col overflow-hidden rounded-3xl border border-slate-200/80 bg-white shadow-[0_4px_24px_-12px_rgba(15,23,42,0.14)] transition-all duration-300 hover:-translate-y-1 hover:border-blue-200 hover:shadow-[0_20px_45px_-18px_rgba(37,99,235,0.22)]">
-      {/* Decorative background */}
+      
+      {isSubmitted && (
+        <div className="pointer-events-none absolute right-0 top-0 z-30 h-28 w-28 overflow-hidden rounded-tr-3xl">
+          <div className="absolute right-[-39px] top-[19px] flex w-[155px] rotate-45 items-center justify-center gap-1.5 border-y border-emerald-300/70 bg-gradient-to-r from-emerald-600 via-emerald-500 to-teal-500 py-2 text-white shadow-[0_5px_15px_-5px_rgba(5,150,105,0.55)]">
+            <CheckCircle2 size={12} strokeWidth={2.8} />
+            <span className="text-[9px] font-extrabold uppercase tracking-[0.16em]">
+              Attempted
+            </span>
+          </div>
+        </div>
+      )}
+{/* Decorative background */}
+
       <div
         className={`pointer-events-none absolute inset-x-0 top-0 h-32 ${
           isAptitude
@@ -537,7 +550,7 @@ function AssessmentCard({ assessment, onStart }) {
         {/* Footer CTA */}
         <div className="mt-auto pt-5">
           <Link
-            href={`/practice-panel?assessmentId=${assessment.id}`}
+            href={isSubmitted ? `/test-result?assessmentId=${assessment.id}`:`/practice-panel?assessmentId=${assessment.id}`}
             // onClick={() => onStart?.(assessment, assessment.type)}
             className={`group/btn cursor-pointer flex h-12 w-full items-center justify-center gap-2 rounded-xl text-sm font-bold text-white shadow-lg transition-all duration-200 active:scale-[0.98] ${
               isAptitude
@@ -545,7 +558,7 @@ function AssessmentCard({ assessment, onStart }) {
                 : "bg-gradient-to-r from-blue-600 to-indigo-600 shadow-blue-600/15 hover:from-blue-700 hover:to-indigo-700 hover:shadow-blue-600/25"
             }`}
           >
-            {isAptitude ? "Start Practice" : "Start Assessment"}
+            {isAptitude ? isSubmitted ? "View result" : "Start Practice" : isSubmitted ? "View result" :"Start Assessment"}
 
             <ArrowRight
               size={16}

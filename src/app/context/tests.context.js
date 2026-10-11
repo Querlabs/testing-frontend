@@ -42,27 +42,69 @@ export const TestProvider = ({ children }) => {
     }
   }, []);
 
-const fetchAssessmentQuestions = useCallback(async (assessmentId) => {
-  try {
-    const response = await axios.post(
-      "/api/practice-panel",
-      { assessmentId }
-    );
-
-    const result = response.data;
-
-    if (!result.success) {
-      throw new Error(
-        result.message || "Failed to fetch assessment questions."
+  const fetchAssessmentQuestions = useCallback(async (assessmentId) => {
+    try {
+      const response = await axios.post(
+        "/api/practice-panel",
+        { assessmentId }
       );
-    }
 
-    return result.questions || [];
-  } catch (error) {
-    console.error("fetchAssessmentQuestions error:", error);
-    throw error;
-  }
-}, []);
+      const result = response.data;
+
+      if (!result.success) {
+        throw new Error(
+          result.message || "Failed to fetch assessment questions."
+        );
+      }
+
+      return result.questions || [];
+    } catch (error) {
+      console.error("fetchAssessmentQuestions error:", error);
+      throw error;
+    }
+  }, []);
+
+  const submitAssessmentResponse = async (payload) => {
+    try {
+      const response = await axios.post(
+        "/api/test-submit",
+        payload,
+        {
+          withCredentials: true,
+        }
+      );
+
+      return response.data;
+    } catch (error) {
+      console.error(
+        "Submit assessment error:",
+        error.response?.data || error.message
+      );
+
+      throw error;
+    }
+  };
+
+  const fetchAssessmentResult = async (assessmentId) => {
+    try {
+      const response = await axios.post(
+        "/api/test-results",
+        { assessmentId },
+        {
+          withCredentials: true,
+        }
+      );
+
+      return response.data;
+    } catch (error) {
+      console.error(
+        "Fetch assessment result error:",
+        error.response?.data || error.message
+      );
+
+      throw error;
+    }
+  };
 
   return (
     <TestContext.Provider
@@ -72,7 +114,9 @@ const fetchAssessmentQuestions = useCallback(async (assessmentId) => {
         loadingTests,
         testError,
         fetchAllTest,
-        fetchAssessmentQuestions
+        fetchAssessmentQuestions,
+        submitAssessmentResponse,
+        fetchAssessmentResult
       }}
     >
       {children}

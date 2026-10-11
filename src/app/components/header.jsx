@@ -97,7 +97,7 @@ export default function Hero() {
             </div>
 
             <span className="text-[23px] font-bold tracking-[-0.8px]">
-              Test<span className="text-[#2563EB]">Yourself</span>
+              Inter<span className="text-[#2563EB]">Cracks</span>
             </span>
 
           </a>
