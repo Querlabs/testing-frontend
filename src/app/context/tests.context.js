@@ -7,7 +7,7 @@ import {
   useState,
   useCallback,
 } from "react";
-
+import axios from "axios";
 const TestContext = createContext(null);
 
 export const TestProvider = ({ children }) => {
@@ -42,6 +42,28 @@ export const TestProvider = ({ children }) => {
     }
   }, []);
 
+const fetchAssessmentQuestions = useCallback(async (assessmentId) => {
+  try {
+    const response = await axios.post(
+      "/api/practice-panel",
+      { assessmentId }
+    );
+
+    const result = response.data;
+
+    if (!result.success) {
+      throw new Error(
+        result.message || "Failed to fetch assessment questions."
+      );
+    }
+
+    return result.questions || [];
+  } catch (error) {
+    console.error("fetchAssessmentQuestions error:", error);
+    throw error;
+  }
+}, []);
+
   return (
     <TestContext.Provider
       value={{
@@ -50,6 +72,7 @@ export const TestProvider = ({ children }) => {
         loadingTests,
         testError,
         fetchAllTest,
+        fetchAssessmentQuestions
       }}
     >
       {children}

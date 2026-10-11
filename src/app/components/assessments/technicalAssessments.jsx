@@ -330,6 +330,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
+import { useSearchParams } from "next/navigation";
 import {
   ArrowRight,
   Brain,
@@ -341,7 +342,7 @@ import {
   Clock
 } from "lucide-react";
 import { useTest } from "@/app/context/tests.context";
-
+import Link from "next/link";
 const ROLES = [
   "core-sde-1",
   "core-sde-2",
@@ -535,8 +536,9 @@ function AssessmentCard({ assessment, onStart }) {
 
         {/* Footer CTA */}
         <div className="mt-auto pt-5">
-          <button
-            onClick={() => onStart?.(assessment, assessment.type)}
+          <Link
+            href={`/practice-panel?assessmentId=${assessment.id}`}
+            // onClick={() => onStart?.(assessment, assessment.type)}
             className={`group/btn cursor-pointer flex h-12 w-full items-center justify-center gap-2 rounded-xl text-sm font-bold text-white shadow-lg transition-all duration-200 active:scale-[0.98] ${
               isAptitude
                 ? "bg-gradient-to-r from-violet-600 to-indigo-600 shadow-violet-600/15 hover:from-violet-700 hover:to-indigo-700 hover:shadow-violet-600/25"
@@ -549,7 +551,7 @@ function AssessmentCard({ assessment, onStart }) {
               size={16}
               className="transition-transform duration-200 group-hover/btn:translate-x-1"
             />
-          </button>
+          </Link>
 
           <p className="mt-3 text-center text-[11px] font-medium text-slate-400">
             <Clock3 size={12} className="mr-1 inline-block" />
@@ -599,7 +601,12 @@ export default function TechnicalPractice({ onStart }) {
     fetchAllTest,
     loadingTests,
     testError,
+    
   } = useTest();
+
+  const searchParams = useSearchParams();
+
+  const assessmentId = searchParams.get("assessmentId");
 
   const [selectedType, setSelectedType] = useState("aptitude");
   const [selectedRole, setSelectedRole] = useState("all");
