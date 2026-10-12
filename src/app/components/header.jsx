@@ -105,11 +105,11 @@ export default function Hero() {
           {/* Navigation */}
           <nav className="hidden items-center gap-9 lg:flex">
 
-            {["Home", "Features", "How It Works", "Pricing"].map(
+            {["Home", "Features", "How It Works", "Pricing", "Blogs"].map(
               (item, index) => (
                 <a
                   key={item}
-                  href="#"
+                  href={`${item=="Blogs" ? item : "#"}`}
                   className={`relative py-3 text-[14px] font-medium transition-colors ${
                     index === 0
                       ? "text-[#2563EB]"
