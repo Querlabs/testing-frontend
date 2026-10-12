@@ -8,6 +8,8 @@ export const AssessmentProvider = ({ children }) => {
     const [Loading, setLoading] = useState(false);
     const [LoadingMessage, setLoadingMessage] = useState("")
     const [CurrentQuestion, setCurrentQuestion] = useState({});
+    const [prebuildAssessments, setPrebuildAssessments] = useState([]);
+    const prebuildAssessmentRequest = useRef(null);
     const socketRef = useRef(null);
     const AddNewAssessment = async (newAssessement) => {
         setLoading(true)
@@ -46,6 +48,60 @@ export const AssessmentProvider = ({ children }) => {
 
         
     };
+
+    const FetchPrebuildAssessment = async (forceRefresh = false) => {
+        // Cache available hai toh API call skip karo.
+        if (!forceRefresh && prebuildAssessments.length > 0) {
+        return prebuildAssessments;
+        }
+
+        // Multiple simultaneous requests ko prevent karo.
+        if (!forceRefresh && prebuildAssessmentRequest.current) {
+            return prebuildAssessmentRequest.current;
+        }
+
+        setLoading(true);
+
+        const request = (async () => {
+            try {
+                const response = await axios.get("/api/simulation", {
+                    withCredentials: true,
+                });
+
+                const result = response.data;
+
+                // API response ko context state mein cache karo.
+                const templates = Array.isArray(result)
+                    ? result
+                    : Array.isArray(result?.data)
+                        ? result.data
+                        : Array.isArray(result?.templates)
+                            ? result.templates
+                            : [];
+
+                setPrebuildAssessments(templates);
+
+                return templates;
+            } catch (error) {
+                console.error("Simulation Error:", error);
+
+                throw (
+                    error.response?.data || {
+                        success: false,
+                        message: "Something went wrong while fetching simulations.",
+                    }
+                );
+            } finally {
+                setLoading(false);
+                prebuildAssessmentRequest.current = null;
+            }
+        })();
+
+        prebuildAssessmentRequest.current = request;
+
+        return request;
+
+        };
 
     const getAllCustomAssessments = async () => {
         setLoading(true);
@@ -182,7 +238,8 @@ export const AssessmentProvider = ({ children }) => {
     };
 
     return (
-        <AssessmentContext.Provider value={{sendAnswer, CurrentQuestion, connectInterview, startInterviewAssessment, Loading, AddNewAssessment, getAllCustomAssessments, LoadingMessage}}>
+        <AssessmentContext.Provider value={{sendAnswer, CurrentQuestion, connectInterview, startInterviewAssessment, Loading, AddNewAssessment, getAllCustomAssessments, LoadingMessage, prebuildAssessments,
+FetchPrebuildAssessment,}}>
         {children}
         </AssessmentContext.Provider>
     );
