@@ -12,6 +12,7 @@ import CompanyRoleSimulations from "./components/companyRole";
 import PricingSection from "./components/pricing";
 import FinalCTA from "./components/cta";
 import Footer from "./components/footer";
+import LatestBlogs from "./components/blogs/latest";
 export default function Home() {
   return (
     <div className="">
@@ -25,6 +26,7 @@ export default function Home() {
         <ReadinessScore/>
         <ImprovementLoop/>
         <CompanyRoleSimulations/>
+        <LatestBlogs/>
         <FinalCTA/>
         <PricingSection/>
         <Footer/>

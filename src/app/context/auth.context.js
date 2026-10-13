@@ -1,13 +1,15 @@
 "use client";
 
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 import axios from 'axios'
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
 
     const [Loading, setLoading] = useState(false);
-
+    const [blogs, setBlogs] = useState([])
+    const [latestBlogs, setLatestBlogs] = useState([]);
+    const [latestBlogsLoading, setLatestBlogsLoading] = useState(false);
     const signup = async (formData) => {
         try {
             setLoading(Loading=> true);
@@ -113,8 +115,115 @@ export const AuthProvider = ({ children }) => {
         }
     };
 
+    const createBlog = async (blogData) => {
+        setLoading(Loading=> true)
+        try {
+            const response = await axios.post('/api/blogs', blogData);
+            setLoading(Loading=> false)
+
+            return response.data;
+
+        } catch (error) {
+            console.error(
+            "Create blog error:",
+            error.response?.data || error.message
+            );
+            setLoading(Loading=> false)
+
+            throw new Error(
+            error.response?.data?.message || "Failed to create blog"
+            );
+        }
+    };
+
+    const fetchBlogs = async () => {
+        setLoading(true);
+
+        try {
+            const response = await axios.get("/api/blogs");
+
+            const blogsDB = (response.data.blogs || []).map((blog) => ({
+            ...blog,
+            id: blog._id || blog.id,
+            description: blog.excerpt || "",
+            image: blog.coverImage || "",
+            author:
+                typeof blog.author === "string"
+                ? blog.author
+                : blog.author?.name || "QuerLabs Team",
+            date: blog.publishedAt
+                ? new Date(blog.publishedAt).toLocaleDateString("en-IN", {
+                    day: "2-digit",
+                    month: "short",
+                    year: "numeric",
+                })
+                : "",
+            readTime: `${blog.readingTime || 1} min read`,
+            ccontent: blog.content || "",
+            contentText: blog.contentText || "",
+            }));
+            setBlogs(blogs=> blogsDB);
+            return blogsDB;
+        } catch (error) {
+            console.error(
+            "Fetch blogs error:",
+            error.response?.data || error.message
+            );
+
+            throw new Error(
+            error.response?.data?.message || "Failed to fetch blogs"
+            );
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const fetchLatestBlogs = async () => {
+        setLatestBlogsLoading(true);
+
+        try {
+            const response = await axios.get("/api/latest-blogs");
+
+            const latestBlogsDB = (response.data.blogs || []).map((blog) => ({
+            ...blog,
+            id: blog._id || blog.id,
+            description: blog.excerpt || "",
+            image: blog.coverImage || "",
+            author:
+                typeof blog.author === "string"
+                ? blog.author
+                : blog.author?.name || "QuerLabs Team",
+            date: blog.publishedAt
+                ? new Date(blog.publishedAt).toLocaleDateString("en-IN", {
+                    day: "2-digit",
+                    month: "short",
+                    year: "numeric",
+                })
+                : "",
+            readTime: `${blog.readingTime || 1} min read`,
+            content: blog.content || "",
+            contentText: blog.contentText || "",
+            }));
+
+            setLatestBlogs(latestBlogsDB);
+            return latestBlogsDB;
+        } catch (error) {
+            console.error(
+            "Fetch latest blogs error:",
+            error.response?.data || error.message
+            );
+
+            throw new Error(
+            error.response?.data?.message || "Failed to fetch latest blogs"
+            );
+        } finally {
+            setLatestBlogsLoading(false);
+        }
+        };
+
+
     return (
-        <AuthContext.Provider value={{Loading, signup, verifyOTP, login, autoLogin, completeOnboarding}}>
+        <AuthContext.Provider value={{latestBlogs, latestBlogsLoading,fetchLatestBlogs, blogs, fetchBlogs, createBlog, Loading, signup, verifyOTP, login, autoLogin, completeOnboarding}}>
         {children}
         </AuthContext.Provider>
     );
