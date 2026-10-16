@@ -84,22 +84,16 @@ export default function Hero() {
         <div className="mx-auto flex h-full max-w-[1440px] items-center justify-between px-7 xl:px-16">
 
           {/* Logo */}
-          <a href="#" className="group flex items-center gap-3">
-
-            <div className="relative flex h-9 w-9 items-end justify-center gap-[3px]">
-
-              <span className="h-3 w-[6px] rounded-full bg-[#2563EB] transition-all duration-300 group-hover:h-5" />
-
-              <span className="h-6 w-[6px] rounded-full bg-[#2563EB]" />
-
-              <span className="h-9 w-[6px] rounded-full bg-gradient-to-t from-[#2563EB] to-[#6366F1] transition-all duration-300 group-hover:h-7" />
-
-            </div>
-
+          <a href="/" className="group flex items-center gap-3">
+            <img
+              src="/logo.png"
+              alt="InterCracks Logo"
+              className="h-45 w-45 object-contain transition-transform duration-300 group-hover:scale-105"
+            />
+{/* 
             <span className="text-[23px] font-bold tracking-[-0.8px]">
               Inter<span className="text-[#2563EB]">Cracks</span>
-            </span>
-
+            </span> */}
           </a>
 
           {/* Navigation */}
