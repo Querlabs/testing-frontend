@@ -145,7 +145,7 @@ export default function Hero() {
                 href="/signup"
                 className="group flex items-center gap-2 rounded-full bg-[#2563EB] px-5 py-2.5 text-[14px] font-semibold text-white shadow-[0_8px_25px_rgba(37,99,235,.22)] transition-all duration-300 hover:-translate-y-0.5 hover:bg-[#1D4ED8] hover:shadow-[0_12px_30px_rgba(37,99,235,.3)]"
               >
-                Get Started
+                Get Started Now
 
                 <Arrow className="transition-transform duration-300 group-hover:translate-x-1" />
               </Link>
