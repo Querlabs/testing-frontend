@@ -575,29 +575,34 @@ export default function BlogDetailPage() {
           {blog.category || "General"}
         </span>
 
-        <h1
-            className="
-                mt-7 text-3xl font-extrabold leading-tight tracking-tight sm:text-6xl
-                bg-gradient-to-r from-blue-600 via-cyan-500 to-purple-600
-                bg-[length:200%_auto]
-                bg-clip-text text-transparent
-                animate-[gradient_4s_ease-in-out_infinite]
-            "
-            style={{
-                backgroundImage:
-                "linear-gradient(90deg, #2563eb, #06b6d4, #8b5cf6, #2563eb)",
-                backgroundSize: "200% auto",
-                animation: "gradient 4s linear infinite",
-            }}
-            >
-            {blog.title}
-            <style jsx>{`
-                @keyframes gradient {
-                0% { background-position: 0% center; }
-                100% { background-position: 200% center; }
-                }
-            `}</style>
-            </h1>
+        
+
+<>
+  <h1
+    className="mt-7 text-3xl font-extrabold leading-tight tracking-tight sm:text-6xl bg-clip-text text-transparent"
+    style={{
+      backgroundImage:
+        "linear-gradient(90deg, #2563eb, #06b6d4, #8b5cf6, #2563eb)",
+      backgroundSize: "200% auto",
+      animation: "gradient 4s linear infinite",
+    }}
+  >
+    {blog.title}
+  </h1>
+
+  <style jsx>{`
+    @keyframes gradient {
+      0% {
+        background-position: 0% center;
+      }
+      100% {
+        background-position: 200% center;
+      }
+    }
+  `}</style>
+</>
+
+
         <p className="mx-auto mt-6 max-w-2xl text-base leading-8 text-slate-500 sm:text-lg">
           {blog.description || blog.excerpt}
         </p>
