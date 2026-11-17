@@ -9,48 +9,66 @@ const poppins = Poppins({
   subsets: ["latin"],
   weight: ["400", "500", "600", "700"],
 });
-
 export const metadata = {
-  metadataBase: new URL("https://intercracks.com"),
+  metadataBase: new URL("https://www.intercracks.com"),
 
   title: {
-    default: "InterCracks | Realistic AI Interview Preparation",
+    default: "InterCracks | AI-Powered Interview Preparation",
     template: "%s | InterCracks",
   },
 
   description:
-    "Prepare for real interviews with realistic AI-powered interview simulations, assessments, and career-focused practice.",
+    "Practice like you're already in the interview. Experience realistic AI-powered interview simulations, technical assessments, and interview preparation inspired by leading tech companies.",
 
   applicationName: "InterCracks",
 
   keywords: [
     "InterCracks",
     "AI interview preparation",
-    "mock interviews",
+    "AI mock interviews",
     "technical interview practice",
     "interview simulation",
+    "job interview preparation",
+    "coding interview preparation",
   ],
 
   alternates: {
-    canonical: "/",
+    canonical: "https://www.intercracks.com/",
   },
 
   openGraph: {
-    title: "InterCracks | Realistic AI Interview Preparation",
+    title: "InterCracks | AI-Powered Interview Preparation",
     description:
-      "Experience realistic interviews. Build confidence. Crack your next interview.",
-    url: "https://intercracks.com",
+      "Practice like you're already in the interview. Train with realistic AI-powered interview simulations.",
+    url: "https://www.intercracks.com/",
     siteName: "InterCracks",
     type: "website",
-    images: ["/og-image.png"],
+    images: [
+      {
+        url: "/og-image.png",
+        width: 1200,
+        height: 630,
+        alt: "InterCracks - AI-Powered Interview Preparation",
+      },
+    ],
   },
 
   twitter: {
     card: "summary_large_image",
-    title: "InterCracks | Realistic AI Interview Preparation",
+    title: "InterCracks | AI-Powered Interview Preparation",
     description:
-      "Experience realistic interviews. Build confidence. Crack your next interview.",
+      "Experience realistic AI-powered interview simulations and prepare for your next opportunity.",
     images: ["/og-image.png"],
+  },
+
+  icons: {
+    icon: "/logo.png",
+    apple: "/logo.png",
+  },
+
+  robots: {
+    index: true,
+    follow: true,
   },
 };
 
