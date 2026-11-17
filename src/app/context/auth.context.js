@@ -10,6 +10,8 @@ export const AuthProvider = ({ children }) => {
     const [blogs, setBlogs] = useState([])
     const [latestBlogs, setLatestBlogs] = useState([]);
     const [latestBlogsLoading, setLatestBlogsLoading] = useState(false);
+    const [singleBlog, setSingleBlog] = useState(null);
+    const [singleBlogLoading, setSingleBlogLoading] = useState(false);
     const signup = async (formData) => {
         try {
             setLoading(Loading=> true);
@@ -219,11 +221,58 @@ export const AuthProvider = ({ children }) => {
         } finally {
             setLatestBlogsLoading(false);
         }
-        };
+    };
+
+    const fetchBlogBySlug = async (slug) => {
+        setSingleBlogLoading(true);
+
+        try {
+            const response = await axios.post("/api/blog-details", {
+                slug
+            });
+
+            const blog = response.data.blog;
+
+            const formattedBlog = {
+                ...blog,
+                id: blog._id || blog.id,
+                description: blog.excerpt || "",
+                image: blog.coverImage || "",
+                author:
+                    typeof blog.author === "string"
+                        ? blog.author
+                        : blog.author?.name || "InterCracks Editorial Team",
+                date: blog.publishedAt
+                    ? new Date(blog.publishedAt).toLocaleDateString("en-IN", {
+                        day: "2-digit",
+                        month: "long",
+                        year: "numeric",
+                    })
+                    : "",
+                readTime: `${blog.readingTime || 1} min read`,
+                content: blog.content || "",
+                contentText: blog.contentText || "",
+            };
+
+            setSingleBlog(formattedBlog);
+
+            return formattedBlog;
+
+        } catch (error) {
+            setSingleBlog(null);
+
+            throw new Error(
+                error.response?.data?.message || "Failed to fetch blog"
+            );
+
+        } finally {
+            setSingleBlogLoading(false);
+        }
+    };
 
 
     return (
-        <AuthContext.Provider value={{latestBlogs, latestBlogsLoading,fetchLatestBlogs, blogs, fetchBlogs, createBlog, Loading, signup, verifyOTP, login, autoLogin, completeOnboarding}}>
+        <AuthContext.Provider value={{singleBlog,singleBlogLoading,fetchBlogBySlug, latestBlogs, latestBlogsLoading,fetchLatestBlogs, blogs, fetchBlogs, createBlog, Loading, signup, verifyOTP, login, autoLogin, completeOnboarding}}>
         {children}
         </AuthContext.Provider>
     );

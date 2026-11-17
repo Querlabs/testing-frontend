@@ -1,10 +1,9 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect ,useState} from "react";
 import Link from "next/link";
 import { ArrowRight, ArrowUpRight, Clock3, CalendarDays } from "lucide-react";
 import { useAuth } from "@/app/context/auth.context";
-
 export default function LatestBlogs() {
   const {
     latestBlogs = [],
@@ -133,7 +132,7 @@ export default function LatestBlogs() {
                     </span>
 
                     <Link
-                      href="/Blogs"
+                      href={`/blog-details?blog=${blog.slug}`}
                       className="inline-flex shrink-0 items-center gap-1.5 rounded-lg bg-blue-50 px-3.5 py-2.5 text-sm font-semibold text-blue-700 transition hover:bg-blue-600 hover:text-white"
                     >
                       Read More

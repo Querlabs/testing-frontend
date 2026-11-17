@@ -769,7 +769,7 @@ import {
   X,
 } from "lucide-react";
 import { useAuth } from "../context/auth.context";
-
+import Link from "next/link";
 const categories = [
   "All articles",
   "Technology",
@@ -781,7 +781,7 @@ const categories = [
   "Finance",
   "Other",
 ];
-
+import Footer from "./footer";
 export default function BlogsPage() {
   const { blogs = [], fetchBlogs, Loading } = useAuth();
 
@@ -959,14 +959,15 @@ export default function BlogsPage() {
                 </span>
               </div>
 
-              <div className="absolute inset-0 z-0">
-                <button
+              {/* <div className="absolute inset-0 z-0">
+                <Link
                   type="button"
-                  onClick={() => openArticle(featuredBlog)}
+                  // onClick={() => openArticle(featuredBlog)}
+                  href={`/blog-details?blog=${featuredBlog.slug}`}
                   aria-label={`Read ${featuredBlog.title}`}
                   className="h-full w-full cursor-pointer"
                 />
-              </div>
+              </div> */}
 
               <div className="pointer-events-none absolute bottom-0 left-0 right-0 z-10 p-5 sm:p-8 lg:p-10">
                 <span className="mb-4 inline-block rounded-md bg-blue-600 px-3 py-1.5 text-xs font-semibold text-white">
@@ -1012,14 +1013,16 @@ export default function BlogsPage() {
                     </div>
                   </div>
 
-                  <button
-                    type="button"
-                    onClick={() => openArticle(featuredBlog)}
+                  <Link
+                    // type="button"
+                    // onClick={() => openArticle(featuredBlog)}
+                    href={`/blog-details?blog=${featuredBlog.slug}`}
+
                     className="pointer-events-auto inline-flex items-center gap-2 rounded-lg bg-white px-4 py-3 text-sm font-semibold text-slate-900 transition hover:bg-blue-50"
                   >
                     Read featured article
                     <ArrowUpRight size={16} />
-                  </button>
+                  </Link>
                 </div>
               </div>
             </article>
@@ -1111,9 +1114,9 @@ export default function BlogsPage() {
           <div className="grid grid-cols-1 gap-x-6 gap-y-9 sm:grid-cols-2 lg:grid-cols-3">
             {currentBlogs.map((blog) => (
               <article key={blog.id} className="group min-w-0">
-                <button
-                  type="button"
-                  onClick={() => openArticle(blog)}
+                <Link
+                  // onClick={() => openArticle(blog)}
+                  href={`/blog-details?blog=${blog.slug}`}
                   aria-label={`Read ${blog.title}`}
                   className="relative block aspect-[1.65/1] w-full overflow-hidden rounded-xl bg-slate-100 text-left"
                 >
@@ -1133,7 +1136,7 @@ export default function BlogsPage() {
                   <span className="absolute bottom-3 right-3 flex h-9 w-9 items-center justify-center rounded-full bg-white text-blue-600 opacity-0 shadow-md transition group-hover:opacity-100">
                     <ArrowUpRight size={18} />
                   </span>
-                </button>
+                </Link>
 
                 <div className="pt-5">
                   <div className="flex flex-wrap items-center gap-2 text-xs text-slate-400">
@@ -1553,6 +1556,7 @@ export default function BlogsPage() {
           border-color: #e2e8f0;
         }
       `}</style>
+      <Footer/>
     </main>
   );
 }
