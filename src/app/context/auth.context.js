@@ -12,6 +12,7 @@ export const AuthProvider = ({ children }) => {
     const [latestBlogsLoading, setLatestBlogsLoading] = useState(false);
     const [singleBlog, setSingleBlog] = useState(null);
     const [singleBlogLoading, setSingleBlogLoading] = useState(false);
+    const [contactLoading, setContactLoading] = useState(false);
     const signup = async (formData) => {
         try {
             setLoading(Loading=> true);
@@ -270,9 +271,40 @@ export const AuthProvider = ({ children }) => {
         }
     };
 
+    const submitContactQuery = async (formData) => {
+        setContactLoading(true);
+
+        try {
+            const response = await axios.post(
+                "/api/contact",
+                formData,
+                {
+                    withCredentials: true,
+                }
+            );
+
+            return response.data;
+
+        } catch (error) {
+            console.error(
+                "Contact Query Error:",
+                error.response?.data || error.message
+            );
+
+            throw new Error(
+                error.response?.data?.message ||
+                "Something went wrong while submitting your query."
+            );
+
+        } finally {
+            setContactLoading(false);
+        }
+    };
+
 
     return (
-        <AuthContext.Provider value={{singleBlog,singleBlogLoading,fetchBlogBySlug, latestBlogs, latestBlogsLoading,fetchLatestBlogs, blogs, fetchBlogs, createBlog, Loading, signup, verifyOTP, login, autoLogin, completeOnboarding}}>
+        <AuthContext.Provider value={{singleBlog,singleBlogLoading,fetchBlogBySlug, latestBlogs, latestBlogsLoading,fetchLatestBlogs, blogs, fetchBlogs, createBlog, Loading, signup, verifyOTP, login, autoLogin, completeOnboarding, submitContactQuery,
+        contactLoading}}>
         {children}
         </AuthContext.Provider>
     );

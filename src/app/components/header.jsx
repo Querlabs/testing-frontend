@@ -119,14 +119,23 @@ export default function Hero() {
               )
             )}
 
-            <a
+            {/* <a
               href="#"
               className="flex items-center gap-1.5 text-[14px] font-medium text-[#64748B] hover:text-[#0F172A]"
             >
               Resources
 
               <Chevron />
-            </a>
+            </a> */}
+
+            <Link
+              href="/contact"
+              className="flex items-center gap-1.5 text-[14px] font-medium text-[#64748B] hover:text-[#0F172A]"
+            >
+              Contact us
+
+              {/* <Chevron /> */}
+            </Link>
 
           </nav>
 
