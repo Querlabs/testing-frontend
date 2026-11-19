@@ -4,6 +4,7 @@ import { AuthProvider } from "./context/auth.context";
 import { AssessmentProvider } from "./context/assessments.context";
 import { NeedsProvider } from "./context/needs.context";
 import { TestProvider } from "./context/tests.context";
+import SupportBot from "./components/bot/support";
 const poppins = Poppins({
   variable: "--font-poppins",
   subsets: ["latin"],
@@ -84,6 +85,7 @@ export default function RootLayout({ children }) {
         <AssessmentProvider>
         <AuthProvider>
         {children}
+        <SupportBot/>
         </AuthProvider>
         </AssessmentProvider>
         </NeedsProvider>
